@@ -2,6 +2,13 @@
 
 $accountIdSession = 4;
 
+require_once 'includes.php';
+require_once 'database.php';
+if(isset($userName)) {
+    $accountObj = new AccountDAO();
+    $account = $accountObj->viewAccount($db, $userName);
+}
+
 require_once "includes/header.php";
 
 
@@ -21,12 +28,12 @@ require_once "includes/header.php";
                 <img src="img/humber-logo-webDevPortal.png" class="portalLogo">
             <form>
                 
-                    <div class="col s2">
-                        <p>User's image goes here</p>
+<div class="col s2">
+                        <p><?php echo $account[0]->ProfileImg; ?></p>
                     </div>
                   <div class="file-field input-field col s10">
                     <div class="file-path-wrapper">
-                      <input class="file-path" type="text" placeholder="Profile Picture">
+                      <input class="file-path" type="text" placeholder="Profile Picture" id="acctSettForm__profilePicture" name="profilePicture">
                     </div>
 
                     <div class="btn" id="acctSettForm__browse">
@@ -35,31 +42,34 @@ require_once "includes/header.php";
                     </div>
 
                   </div>
+
+                  <input id="acctSettForm__emailField" type="text" placeholder="<?php echo $account[0]->Email; ?>">
                 
+                  <input id="acctSettForm__passField" type="password"placeholder="Password" name="Password">
+                    <?php if(isset($errorPassword)){ ?>
+                    <span><?php echo '<br/>'.$errorPassword;} ?></span>
                 
-                
-                  <input id="acctSettForm__emailField" type="text" placeholder="Email Address">
-                
-                  <input id="acctSettForm__passField" type="password"placeholder="Password">
-                
-                  <input id="acctSettForm__passConfField" type="password" placeholder="Confirm Password">
-                    <div class="input-field">
-                  <input id="acctSettForm__introField" type="text" placeholder="Personal Description (short)" data-length="10">
+                  <input id="acctSettForm__passConfField" type="password" placeholder="Confirm Password" name="confirmPassword">
+                <?php if(isset($errorConfirmPassword)){ ?>
+                <span><?php echo '<br/>'.$errorConfirmPassword;} ?></span>
+
+                <!--                 <div class="input-field">
+                  <input id="acctSettForm__introField" type="text" placeholder="Personal Description (short)" data-length="10" name="introField">
                     </div>    
                     <div class="input-field">
-                    <textarea id="acctSettForm__descField" class="materialize-textarea" data-length="120" placeholder="Personal Description (long)"></textarea>
-                </div>
-                
+                    <textarea id="acctSettForm__descField" class="materialize-textarea" data-length="120" placeholder="Personal Description (long)" name="descField"></textarea>
+                </div> !-->
+
                 <div class="input-field">
-                  <button type="button" data-target="delete-account-modal" class="btn left" id="acctSettForm__delete-account" value="<?php echo $accountIdSession ?>" >Delete Account</button>
-                <input type="submit" value="Save Changes" class="btn right" id="acctSettForm__save">
-                </div>    
+                    <button type="button" data-target="delete-account-modal" class="btn left" id="acctSettForm__delete-account" value="<?php echo $accountIdSession ?>" >Delete Account</button>
+                    <input type="submit" value="Save Changes" class="btn right" id="acctSettForm__save" name="editId">
+                </div>
             </form>
             </div>
-            
+
         </div>
-    </div> 
-      
+    </div>                                 
+                
         <!-- Modal Structure -->
   <div id="delete-account-modal" class="modal">
     <div class="modal-content">
